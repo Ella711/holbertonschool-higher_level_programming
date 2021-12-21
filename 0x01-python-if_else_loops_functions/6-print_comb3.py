@@ -3,6 +3,6 @@ for number in range(10):
     for numbers in range(10):
         if number < numbers:
             if number == 8 and numbers == 9:
-                print("{}{}".format(number, numbers), end="")
+                print("{}{}".format(number, numbers))
             else:
                 print("{}{}, ".format(number, numbers), end="")
