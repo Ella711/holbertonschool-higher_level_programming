@@ -5,5 +5,3 @@ def square_matrix_simple(matrix=[]):
         squared = [[i * i for i in row] for row in matrix]
         return squared
     return None
-
-# return(list(map(lambda i: i**2, list)) for list in matrix)
