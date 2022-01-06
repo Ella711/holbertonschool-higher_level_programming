@@ -25,7 +25,3 @@ def roman_to_int(roman_string):
         for letter in roman_string[:idx]:
             value -= roman.get(letter)
     return value
-
-
-
-
