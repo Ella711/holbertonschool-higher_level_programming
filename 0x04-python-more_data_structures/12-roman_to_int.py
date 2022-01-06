@@ -15,13 +15,13 @@ def roman_to_int(roman_string):
     if roman_string == "":
         return 0
     for key in roman:
-        if key in roman_string:
-            idx = roman_string.index(key)
+        if key in roman_string.upper():
+            idx = roman_string.upper().index(key)
             break
     value = 0
-    for letter in roman_string[idx:]:
+    for letter in roman_string.upper()[idx:]:
         value += roman.get(letter)
     if idx > 0:
-        for letter in roman_string[:idx]:
+        for letter in roman_string.upper()[:idx]:
             value -= roman.get(letter)
     return value
