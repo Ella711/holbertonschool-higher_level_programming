@@ -10,19 +10,22 @@ def roman_to_int(roman_string):
         'I': 1,
     }
 
-    if roman_string is not None or not isinstance(roman_string, str):
-        for key in roman:
-            if key in roman_string:
-                idx = roman_string.index(key)
-                break
-        value = 0
-        for letter in roman_string[idx:]:
-            value += roman.get(letter)
-        if idx > 0:
-            for letter in roman_string[:idx]:
-                value -= roman.get(letter)
-        return value
-    return 0
+    if roman_string is None or not isinstance(roman_string, str):
+        return 0
+    if roman_string == "":
+        return 0
+    for key in roman:
+        if key in roman_string:
+            idx = roman_string.index(key)
+            break
+    value = 0
+    for letter in roman_string[idx:]:
+        value += roman.get(letter)
+    if idx > 0:
+        for letter in roman_string[:idx]:
+            value -= roman.get(letter)
+    return value
+
 
 
 
