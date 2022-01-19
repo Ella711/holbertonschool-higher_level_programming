@@ -41,7 +41,7 @@ class Square:
         if self.__size == 0:
             print()
         if self.__position[1] > 0:
-            print()
+            print("" * self.__position[1])
         for i in range(self.__size):
             if self.__position[0]:
                 print("_" * self.__position[0], end="")
