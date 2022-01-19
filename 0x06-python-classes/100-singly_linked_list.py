@@ -34,10 +34,8 @@ class Node:
         return str(self.__data)
 
 
-"""Defines Single Linked List"""
-
-
 class SinglyLinkedList:
+    """Defines Single Linked List"""
     def __init__(self):
         self.__head = None
 
