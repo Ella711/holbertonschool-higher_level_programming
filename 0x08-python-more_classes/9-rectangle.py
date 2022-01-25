@@ -15,8 +15,8 @@ class Rectangle:
 
     def __init__(self, width=0, height=0):
         """Initialize attributes with optionals: width, height"""
-        self.height = height
         self.width = width
+        self.height = height
         Rectangle.print_symbol = self.print_symbol
 
         Rectangle.number_of_instances += 1
