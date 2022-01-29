@@ -1,0 +1,56 @@
+The ``101-lazy_matrix_mul`` module
+======================
+
+Using ``lazy_matrix_mul``
+-------------------
+
+This is a lazy_matrix_mul text file in reStructuredText format.  First import
+``lazy_matrix_mul`` from the ``101-lazy_matrix_mul`` module:
+
+    >>> lazy_matrix_mul = __import__('101-lazy_matrix_mul').lazy_matrix_mul
+
+Now use it:
+    >>> m_a = [[1, 2], [3, 4]]
+    >>> m_b = [[1, 2], [3, 4]]
+    >>> print(lazy_matrix_mul(m_a, m_b))
+    [[ 7 10]
+     [15 22]]
+
+    >>> m_a = [[-1.0, -2.0]]
+    >>> m_b = [[-3.0], [-4.0]]
+    >>> print(lazy_matrix_mul(m_a, m_b))
+    [[11.]]
+
+    >>> m_a = []
+    >>> m_b = [[-3.0], [-4.0]]
+    >>> print(lazy_matrix_mul(m_a, m_b))
+    Traceback (most recent call last):
+    ValueError: shapes (0,) and (2,1) not aligned: 0 (dim 0) != 2 (dim 0)
+
+    >>> m_a = [[-3.0], [-4.0]]
+    >>> m_b = []
+    >>> print(lazy_matrix_mul(m_a, m_b))
+    Traceback (most recent call last):
+    ValueError: shapes (2,1) and (0,) not aligned: 1 (dim 1) != 0 (dim 0)
+
+    >>> m_a = [[-3.0], [-4.0]]
+    >>> m_b = [[]]
+    >>> print(lazy_matrix_mul(m_a, m_b))
+    []
+
+    >>> m_a = [[]]
+    >>> m_b = [[-3.0], [-4.0]]
+    >>> print(lazy_matrix_mul(m_a, m_b))
+    Traceback (most recent call last):
+    ValueError: shapes (1,0) and (2,1) not aligned: 0 (dim 1) != 2 (dim 0)
+
+    >>> m_a = [(1, 2)]
+    >>> m_b = [[-3.0], [-4.0]]
+    >>> print(lazy_matrix_mul(m_a, m_b))
+    [[-11.]]
+
+    >>> m_a = [(1, 2), (2, 3)]
+    >>> m_b = [[-3.0], [-4.0]]
+    >>> print(lazy_matrix_mul(m_a, m_b))
+    [[-11.]
+     [-18.]]
