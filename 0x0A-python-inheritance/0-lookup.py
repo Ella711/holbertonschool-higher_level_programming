@@ -10,5 +10,4 @@ def lookup(obj):
     """
     Function that adds 2 integers.
     """
-    if obj is not None:
-        return dir(obj)
+    return dir(obj)
