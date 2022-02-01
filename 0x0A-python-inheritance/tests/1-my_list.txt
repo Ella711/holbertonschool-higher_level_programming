@@ -55,17 +55,26 @@ Now use it:
     Traceback (most recent call last):
     AttributeError: 'list' object has no attribute 'print_sorted'
 
+    >>> other_list.prin_sorted()
+    Traceback (most recent call last):
+    NameError: name 'other_list' is not defined
+
+    >>> my_list = MyList()
     >>> type(MyList())
     <class '1-my_list.MyList'>
 
+    >>> my_list = MyList()
     >>> isinstance(MyList, object)
     True
 
+    >>> my_list = MyList()
     >>> isinstance(MyList, list)
     False
 
+    >>> my_list = MyList()
     >>> issubclass(MyList, list)
     True
 
+    >>> my_list = MyList()
     >>> 'print_sorted' in dir(MyList)
     True
