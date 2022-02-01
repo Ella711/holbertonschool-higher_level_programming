@@ -47,3 +47,15 @@ Now use it:
     >>> l1.print_sorted()
     Traceback (most recent call last):
     AttributeError: 'list' object has no attribute 'print_sorted'
+
+    >>> type(MyList())
+    <class '1-my_list.MyList'>
+
+    >>> isinstance(MyList, object)
+    True
+
+    >>> isinstance(MyList, list)
+    False
+
+    >>> issubclass(MyList, list)
+    True
