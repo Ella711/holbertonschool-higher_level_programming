@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """
-This is the "9-student" module.
+This is the "10-student" module.
 This module supplies one class, class Student.
-
+With public method to_json modified from module 9
 """
 
 
