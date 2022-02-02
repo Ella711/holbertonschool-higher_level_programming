@@ -15,8 +15,8 @@ save_to_json_file = __import__('5-save_to_json_file').save_to_json_file
 filename = "add_item.json"
 
 try:
-    argv_list = load_from_json_file("add_item.json")
+    argv_list = load_from_json_file(filename)
 except FileNotFoundError:
     argv_list = []
 
-save_to_json_file(argv_list + argv[1:], "add_item.json")
+save_to_json_file(argv_list + argv[1:], filename)
