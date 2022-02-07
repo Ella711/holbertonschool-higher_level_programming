@@ -69,5 +69,3 @@ class Base:
                 inst_list.append(cls.create(**json_dict[i]))
             return inst_list
         return inst_list
-
-

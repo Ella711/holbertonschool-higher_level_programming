@@ -37,8 +37,8 @@ class Square(Rectangle):
         Overrides the __str__ method so that it returns
         [Square] (<id>) <x>/<y> - <size>
         """
-        return f"[{self.__class__.__name__}] ({self.id}) {self.x}/{self.y} - " \
-               f"{self.size}"
+        return f"[{self.__class__.__name__}] ({self.id}) " \
+               f"{self.x}/{self.y} - {self.size}"
 
     def update(self, *args, **kwargs):
         """
