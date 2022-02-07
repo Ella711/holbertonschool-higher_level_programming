@@ -1,19 +1,39 @@
 import unittest
+import pep8
+from io import StringIO
+from unittest.mock import patch
 from models.rectangle import Rectangle
+from models.base import Base
+from models import rectangle
 
 
 class TestBase(unittest.TestCase):
 
     def setUp(self):
+        """ Method to prepare each single test """
+        Base._Base__nb_objects = 0
         self.r1 = Rectangle(10, 2, 5, 4)
         self.r2 = Rectangle(2, 5, 7, 3)
         self.r3 = Rectangle(3, 7, 0, 0, 12)
         self.r4 = Rectangle(3, 4)
 
-    def tearDown(self):
-        pass
+    def test_pep8_conformance(self):
+        """ Test that we conform to PEP8 """
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(['models/rectangle.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_module_documentation(self):
+        """ Test if base module is documented """
+        self.assertTrue(rectangle.__doc__)
+
+    def test_class_documentation(self):
+        """ Test if Base class is documented """
+        self.assertTrue(Rectangle.__doc__)
 
     def test_id(self):
+        """Test ids given"""
         self.assertTrue(Rectangle(10, 2, 5, 4), self.id == 10)
         self.assertTrue(Rectangle(2, 5, 7, 3), self.id == 2)
         self.assertTrue(Rectangle(3, 7, 0, 0, 12), self.id == 3)
@@ -141,6 +161,22 @@ class TestBase(unittest.TestCase):
         self.assertEqual(self.r1.area(), 20)
         self.assertEqual(self.r2.area(), 10)
         self.assertEqual(self.r3.area(), 21)
+
+    def test_display_width_height(self):
+        """ Test a Rectangle representation width/height in stdout """
+        r = Rectangle(3, 4)
+        expected = "###\n###\n###\n###\n"
+        with patch('sys.stdout', new=StringIO()) as printed:
+            r.display()
+            self.assertEqual(printed.getvalue(), expected)
+
+    def test_display_all_attr(self):
+        """ Test a Rectangle representation width/height/x/y in stdout """
+        r = Rectangle(2, 4, 1, 2)
+        expected = "\n\n ##\n ##\n ##\n ##\n"
+        with patch('sys.stdout', new=StringIO()) as printed:
+            r.display()
+            self.assertEqual(printed.getvalue(), expected)
 
     def test_str(self):
         """Test method: __str__"""

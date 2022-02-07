@@ -1,19 +1,39 @@
 import unittest
+import pep8
+from io import StringIO
+from unittest.mock import patch
+from models import square
 from models.square import Square
+from models.base import Base
 
 
 class TestBase(unittest.TestCase):
 
     def setUp(self):
+        """ Method to prepare each single test """
+        Base._Base__nb_objects = 0
         self.s1 = Square(10)
         self.s4 = Square(5, 4)
         self.s2 = Square(2, 5, 7)
         self.s3 = Square(3, 7, 0, 12)
 
-    def tearDown(self):
-        pass
+    def test_pep8_conformance(self):
+        """ Test that we conform to PEP8 """
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(['models/square.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_module_documentation(self):
+        """ Test if base module is documented """
+        self.assertTrue(square.__doc__)
+
+    def test_class_documentation(self):
+        """ Test if Base class is documented """
+        self.assertTrue(Square.__doc__)
 
     def test_id(self):
+        """Test ids given"""
         self.assertTrue(Square(10), self.id == 10)
         self.assertTrue(Square(5, 4), self.id == 2)
         self.assertTrue(Square(2, 5, 7), self.id == 3)
@@ -134,6 +154,22 @@ class TestBase(unittest.TestCase):
         self.assertEqual(self.s2.area(), 4)
         self.assertEqual(self.s3.area(), 9)
         self.assertEqual(self.s4.area(), 25)
+
+    def test_display_size(self):
+        """ Test a Square representation of size in stdout """
+        r = Square(4)
+        expected = "####\n####\n####\n####\n"
+        with patch('sys.stdout', new=StringIO()) as printed:
+            r.display()
+            self.assertEqual(printed.getvalue(), expected)
+
+    def test_display_all_attr(self):
+        """ Test a Square representation size/x/y in stdout """
+        r = Square(2, 1, 2)
+        expected = "\n\n ##\n ##\n"
+        with patch('sys.stdout', new=StringIO()) as printed:
+            r.display()
+            self.assertEqual(printed.getvalue(), expected)
 
     def test_str(self):
         """Test method: __str__"""
