@@ -64,10 +64,12 @@ class Base:
         """ Returns a list of instances """
         filename = cls.__name__ + ".json"
         inst_list = []
-        if filename:
+        try:
             with open(filename, "r") as filed_opened:
                 json_dict = cls.from_json_string(filed_opened.read())
             for i, j_dict in enumerate(json_dict):
                 inst_list.append(cls.create(**json_dict[i]))
-            return inst_list
+        except FileNotFoundError:
+            pass
+
         return inst_list
