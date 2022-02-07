@@ -41,26 +41,34 @@ class TestBase(unittest.TestCase):
 
     def test_default_attributes(self):
         """Test attributes given"""
-        self.assertTrue(self.s3.id is not None)
-        self.assertTrue(self.s3.width == 3)
-        self.assertTrue(self.s3.height == 3)
-        self.assertTrue(self.s3.size == 3)
-        self.assertTrue(self.s3.x == 7)
-        self.assertTrue(self.s3.y == 0)
+        s3 = Square(3, 7, 0, 12)
+        self.assertTrue(s3.id is not None)
+        self.assertTrue(s3.width == 3)
+        self.assertTrue(s3.height == 3)
+        self.assertTrue(s3.size == 3)
+        self.assertTrue(s3.x == 7)
+        self.assertTrue(s3.y == 0)
 
     def test_width(self):
         """Test width attribute"""
-        self.assertEqual(self.s1.width, 10)
-        self.assertEqual(self.s2.width, 2)
-        self.assertEqual(self.s3.width, 3)
-        self.assertEqual(self.s4.width, 5)
+        s1 = Square(10)
+        s4 = Square(5, 4)
+        s2 = Square(2, 5, 7)
+        s3 = Square(3, 7, 0, 12)
 
+        self.assertEqual(s1.width, 10)
+        self.assertEqual(s2.width, 2)
+        self.assertEqual(s3.width, 3)
+        self.assertEqual(s4.width, 5)
+
+    def test_widths_valueerror(self):
         """Test width attribute value validations"""
         with self.assertRaisesRegex(ValueError, "width must be > 0"):
             Square(-2)
             Square(-2.5)
             Square(0)
 
+    def test_width_typeerror(self):
         """Test width attribute type validations"""
         with self.assertRaisesRegex(TypeError, "width must be an integer"):
             Square(2.5)
@@ -73,28 +81,43 @@ class TestBase(unittest.TestCase):
 
     def test_height(self):
         """Test height attribute"""
-        self.assertEqual(self.s1.height, 10)
-        self.assertEqual(self.s2.height, 2)
-        self.assertEqual(self.s3.height, 3)
-        self.assertEqual(self.s4.height, 5)
+        s1 = Square(10)
+        s4 = Square(5, 4)
+        s2 = Square(2, 5, 7)
+        s3 = Square(3, 7, 0, 12)
+
+        self.assertEqual(s1.height, 10)
+        self.assertEqual(s2.height, 2)
+        self.assertEqual(s3.height, 3)
+        self.assertEqual(s4.height, 5)
 
     def test_size(self):
         """Test height attribute"""
-        self.assertEqual(self.s2.size, 2)
-        self.assertEqual(self.s3.size, 3)
-        self.assertEqual(self.s4.size, 5)
+        s4 = Square(5, 4)
+        s2 = Square(2, 5, 7)
+        s3 = Square(3, 7, 0, 12)
+
+        self.assertEqual(s2.size, 2)
+        self.assertEqual(s3.size, 3)
+        self.assertEqual(s4.size, 5)
 
     def test_x(self):
         """Test x attribute"""
-        self.assertEqual(self.s2.x, 5)
-        self.assertEqual(self.s3.x, 7)
-        self.assertEqual(self.s4.x, 4)
+        s4 = Square(5, 4)
+        s2 = Square(2, 5, 7)
+        s3 = Square(3, 7, 0, 12)
 
+        self.assertEqual(s2.x, 5)
+        self.assertEqual(s3.x, 7)
+        self.assertEqual(s4.x, 4)
+
+    def test_x_valueerror(self):
         """Test x attribute value validations"""
         with self.assertRaisesRegex(ValueError, "x must be >= 0"):
             Square(10, -5)
             Square(10, -2.5)
 
+    def test_x_typeerror(self):
         """Test x attribute type validations"""
         with self.assertRaisesRegex(TypeError, "x must be an integer"):
             Square(10, 2.5)
@@ -108,14 +131,19 @@ class TestBase(unittest.TestCase):
 
     def test_y(self):
         """Test y attribute"""
+        s2 = Square(2, 5, 7)
+        s3 = Square(3, 7, 0, 12)
+
         self.assertEqual(self.s2.y, 7)
         self.assertEqual(self.s3.y, 0)
 
+    def test_y_valueerror(self):
         """Test y attribute value validations"""
         with self.assertRaisesRegex(ValueError, "y must be >= 0"):
             Square(10, 2, -3)
             Square(10, 2, -5.2)
 
+    def test_y_typeerror(self):
         """Test y attribute type validations"""
         with self.assertRaisesRegex(TypeError, "y must be an integer"):
             Square(10, 2, 5.2)
@@ -150,10 +178,15 @@ class TestBase(unittest.TestCase):
 
     def test_area(self):
         """Test method: area"""
-        self.assertEqual(self.s1.area(), 100)
-        self.assertEqual(self.s2.area(), 4)
-        self.assertEqual(self.s3.area(), 9)
-        self.assertEqual(self.s4.area(), 25)
+        s1 = Square(10)
+        s4 = Square(5, 4)
+        s2 = Square(2, 5, 7)
+        s3 = Square(3, 7, 0, 12)
+
+        self.assertEqual(s1.area(), 100)
+        self.assertEqual(s2.area(), 4)
+        self.assertEqual(s3.area(), 9)
+        self.assertEqual(s4.area(), 25)
 
     def test_display_size(self):
         """ Test a Square representation of size in stdout """
@@ -178,42 +211,52 @@ class TestBase(unittest.TestCase):
 
     def test_update(self):
         """Test method: update(*args)"""
-        self.assertEqual(str(self.s3), '[Square] (12) 7/0 - 3')
-        self.s3.update(1, 2, 3, 4)
-        self.assertEqual(str(self.s3), '[Square] (1) 3/4 - 2')
-        self.s3.update()
-        self.assertEqual(str(self.s3), '[Square] (1) 3/4 - 2')
-        self.s3.update(7)
-        self.assertEqual(str(self.s3), '[Square] (7) 3/4 - 2')
-        self.s3.update(7, 6)
-        self.assertEqual(str(self.s3), '[Square] (7) 3/4 - 6')
-        self.s3.update(7, 6, 5)
-        self.assertEqual(str(self.s3), '[Square] (7) 5/4 - 6')
-        self.s3.update(7, 6, 5, 4)
-        self.assertEqual(str(self.s3), '[Square] (7) 5/4 - 6')
+        s3 = Square(3, 7, 0, 12)
 
+        self.assertEqual(str(s3), '[Square] (12) 7/0 - 3')
+        s3.update(1, 2, 3, 4)
+        self.assertEqual(str(s3), '[Square] (1) 3/4 - 2')
+        s3.update()
+        self.assertEqual(str(s3), '[Square] (1) 3/4 - 2')
+        s3.update(7)
+        self.assertEqual(str(s3), '[Square] (7) 3/4 - 2')
+        s3.update(7, 6)
+        self.assertEqual(str(s3), '[Square] (7) 3/4 - 6')
+        s3.update(7, 6, 5)
+        self.assertEqual(str(s3), '[Square] (7) 5/4 - 6')
+        s3.update(7, 6, 5, 4)
+        self.assertEqual(str(s3), '[Square] (7) 5/4 - 6')
+
+    def test_update_args_errors(self):
         """Test error *args"""
+        s3 = Square(3, 7, 0, 12)
         with self.assertRaisesRegex(TypeError, "y must be an integer"):
-            self.s3.update(7, 1, 2, "string")
+            s3.update(7, 1, 2, "string")
         with self.assertRaisesRegex(ValueError, "y must be >= 0"):
-            self.s3.update(7, 1, 2, -99)
+            s3.update(7, 1, 2, -99)
 
+    def test_update_kwargs(self):
         """Test method: update(**kwargs)"""
-        self.s3.update(id=7)
-        self.assertEqual(str(self.s3), '[Square] (7) 2/4 - 1')
-        self.s3.update(id=7, x=13, y=17, size=27)
-        self.assertEqual(str(self.s3), '[Square] (7) 13/17 - 27')
+        s3 = Square(3, 7, 0, 12)
+        s3.update(id=7)
+        self.assertEqual(str(s3), '[Square] (7) 7/0 - 3')
+        s3.update(id=7, x=13, y=17, size=27)
+        self.assertEqual(str(s3), '[Square] (7) 13/17 - 27')
 
+    def test_update_kwargs_errors(self):
         """Test both valid and invalid *kwargs"""
-        self.s3.update(nokey=555, invalid=777, testing=999, id=1111)
-        self.assertEqual(str(self.s3), '[Square] (1111) 13/17 - 27')
+        s3 = Square(3, 7, 0, 12)
+        s3.update(nokey=555, invalid=777, testing=999, id=1111)
+        self.assertEqual(str(s3), '[Square] (1111) 7/0 - 3')
 
     def test_to_dictionary(self):
         """Test method: to_dictionary"""
+        s3 = Square(3, 7, 0, 12)
+        s4 = Square(5, 4)
         s3dic = self.s3.to_dictionary()
         self.assertEqual(type(s3dic), dict)
-        self.s4.update(**s3dic)
-        self.assertEqual(str(self.s4), '[Square] (12) 7/0 - 3')
+        s4.update(**s3dic)
+        self.assertEqual(str(s4), '[Square] (12) 7/0 - 3')
 
 
 if __name__ == "__main__":
