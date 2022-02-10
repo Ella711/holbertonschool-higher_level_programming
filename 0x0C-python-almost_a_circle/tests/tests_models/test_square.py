@@ -1,5 +1,6 @@
 import unittest
 import pep8
+import inspect
 from io import StringIO
 from unittest.mock import patch
 from models import square
@@ -25,12 +26,18 @@ class TestBase(unittest.TestCase):
                          "Found code style errors (and warnings).")
 
     def test_module_documentation(self):
-        """ Test if base module is documented """
+        """ Test if square module is documented """
         self.assertTrue(square.__doc__)
 
     def test_class_documentation(self):
-        """ Test if Base class is documented """
+        """ Test if Square class is documented """
         self.assertTrue(Square.__doc__)
+
+    def test_methods_documentation(self):
+        """ Test if all Square methods are documented """
+        methods = inspect.getmembers(Square)
+        for method in methods:
+            self.assertTrue(inspect.getdoc(method))
 
     def test_id(self):
         """Test ids given"""
@@ -155,10 +162,13 @@ class TestBase(unittest.TestCase):
             Square(1, 1, {10, })
             Square(1, 1, {"d": 10})
 
-    def test_invalid_args(self):
+    def test_invalid_args_too_many(self):
         """Test wrong amount of attributes given"""
         with self.assertRaises(TypeError):
             Square(1, 2, 3, 4, 5, 6, 7)
+
+    def test_invalid_args_too_few(self):
+        """Test wrong amount of attributes given"""
         with self.assertRaises(TypeError):
             Square()
             Square(None)
@@ -176,6 +186,18 @@ class TestBase(unittest.TestCase):
         """Test class created is indeed Rectangle"""
         self.assertEqual(type(Square(1)), Square)
 
+    def test_rectangle_instance_update_id(self):
+        """ Test updating the value for id """
+        r = Square(10)
+        r.id = 91
+        self.assertEqual(r.id, 91)
+
+    def test_square_instance_update_size(self):
+        """ Test a Square instance updating values for size """
+        r = Square(4)
+        r.size = 15
+        self.assertEqual(r.size, 15)
+
     def test_area(self):
         """Test method: area"""
         s1 = Square(10)
@@ -187,6 +209,22 @@ class TestBase(unittest.TestCase):
         self.assertEqual(s2.area(), 4)
         self.assertEqual(s3.area(), 9)
         self.assertEqual(s4.area(), 25)
+
+    def test_square_area_method_update(self):
+        """ Test if area method can be updated """
+        r = Square(8)
+        self.assertEqual(r.size, 8)
+        self.assertEqual(r.area(), 64)
+
+        r.area = 17
+        self.assertEqual(r.size, 8)
+        self.assertEqual(r.area, 17)
+
+    def test_square_area_method_with_arguments(self):
+        """ Test if area method receives arguments """
+        r = Square(9, 7)
+        with self.assertRaises(TypeError):
+            r.area(5)
 
     def test_display_size(self):
         """ Test a Square representation of size in stdout """
@@ -227,6 +265,11 @@ class TestBase(unittest.TestCase):
         s3.update(7, 6, 5, 4)
         self.assertEqual(str(s3), '[Square] (7) 5/4 - 6')
 
+    def test_square_update_empty_arguments(self):
+        """ Test update method without arguments """
+        r = Square(9)
+        self.assertFalse(r.update())
+
     def test_update_args_errors(self):
         """Test error *args"""
         s3 = Square(3, 7, 0, 12)
@@ -257,6 +300,12 @@ class TestBase(unittest.TestCase):
         self.assertEqual(type(s3dic), dict)
         s4.update(**s3dic)
         self.assertEqual(str(s4), '[Square] (12) 7/0 - 3')
+
+    def test_square_to_dictionary_arguments(self):
+        """ Test if to_dictionary method receives arguments """
+        r = Square(8)
+        with self.assertRaises(TypeError):
+            r_dict = r.to_dictionary(size=9)
 
 
 if __name__ == "__main__":
