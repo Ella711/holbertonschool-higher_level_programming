@@ -1,3 +1,4 @@
+import inspect
 import unittest
 import pep8
 from io import StringIO
@@ -28,6 +29,13 @@ class TestBase(unittest.TestCase):
         """ Test if Base class is documented """
         self.assertTrue(Rectangle.__doc__)
 
+    def test_methods_documentation(self):
+        """ Test if all Rectangle methods are documented
+            """
+        methods = inspect.getmembers(Rectangle)
+        for method in methods:
+            self.assertTrue(inspect.getdoc(method))
+
     def test_id(self):
         """Test ids given"""
         self.assertTrue(Rectangle(10, 2, 5, 4), self.id == 10)
@@ -43,6 +51,14 @@ class TestBase(unittest.TestCase):
         self.assertTrue(r4.height == 4)
         self.assertTrue(r4.x == 0)
         self.assertTrue(r4.y == 0)
+
+    def test_rectangle_full_instance(self):
+        r = Rectangle(1, 2, 3, 4, 5)
+        self.assertTrue(r.id == 5)
+        self.assertTrue(r.width == 1)
+        self.assertTrue(r.height == 2)
+        self.assertTrue(r.x == 3)
+        self.assertTrue(r.y == 4)
 
     def test_width(self):
         """Test width attribute"""
@@ -156,14 +172,23 @@ class TestBase(unittest.TestCase):
             Rectangle(1, 1, 1, {10, }, 1)
             Rectangle(1, 1, 1, {"d": 10}, 1)
 
-    def test_invalid_args(self):
+    def test_invalid_args_too_many(self):
         """Test wrong amount of attributes given"""
         with self.assertRaises(TypeError):
             Rectangle(1, 2, 3, 4, 5, 6, 7)
+
+    def test_invalid_args_too_few(self):
+        """Test wrong amount of attributes given"""
         with self.assertRaises(TypeError):
             Rectangle(1)
             Rectangle()
             Rectangle(None)
+
+    def test_rectangle_instance_update_id(self):
+        """ Test updating the value for id """
+        r = Rectangle(2, 10)
+        r.id = 91
+        self.assertEqual(r.id, 91)
 
     def test_private_attr_access(self):
         """Test private attributes can't be accessed"""
@@ -186,6 +211,18 @@ class TestBase(unittest.TestCase):
         self.assertEqual(r1.area(), 20)
         self.assertEqual(r2.area(), 10)
         self.assertEqual(r3.area(), 21)
+
+    def test_rectangle_area_method_update(self):
+        """ Test if the area method is updatable """
+        r = Rectangle(8, 4)
+        self.assertEqual(r.width, 8)
+        self.assertEqual(r.height, 4)
+        self.assertEqual(r.area(), 32)
+
+        r.area = 17
+        self.assertEqual(r.width, 8)
+        self.assertEqual(r.height, 4)
+        self.assertEqual(r.area, 17)
 
     def test_display_width_height(self):
         """ Test a Rectangle representation width/height in stdout """
@@ -224,6 +261,11 @@ class TestBase(unittest.TestCase):
         self.assertEqual(str(r3), '[Rectangle] (7) 4/5 - 5/4')
         r3.update(7, 5, 4, 3, 2)
         self.assertEqual(str(r3), '[Rectangle] (7) 3/2 - 5/4')
+
+    def test_rectangle_update_empty_arguments(self):
+        """ Test method: update without arguments """
+        r = Rectangle(9, 6)
+        self.assertFalse(r.update())
 
     def test_update_args_errors(self):
         """Test error *args"""
