@@ -1,4 +1,5 @@
 import inspect
+import os
 import unittest
 import pep8
 from io import StringIO
@@ -297,6 +298,37 @@ class TestBase(unittest.TestCase):
         self.assertEqual(type(r3dic), dict)
         r4.update(**r3dic)
         self.assertEqual(str(r4), '[Rectangle] (12) 0/0 - 3/7')
+
+    def test_save_to_file(self):
+        """ Test method: save_to_file """
+        r1 = Rectangle(8, 16, 2, 2, 15)
+        r2 = Rectangle(7, 16, 3, 3, 15)
+        if os.path.exists("Rectangle.json"):
+            os.remove("Rectangle.json")
+
+        Rectangle.save_to_file([r1, r2])
+        self.assertTrue(os.path.exists("Rectangle.json"))
+
+    def test_save_to_file_none(self):
+        """ Test method: save_to_file with none argument """
+        if os.path.exists("Rectangle.json"):
+            os.remove("Rectangle.json")
+
+        Rectangle.save_to_file(None)
+        self.assertTrue(os.path.exists("Rectangle.json"))
+        with open("Rectangle.json", 'r', encoding='utf-8') as f:
+            self.assertEqual("[]", f.read())
+
+    def test_save_to_file_empty(self):
+        """ Test method: save_to_file with empty argument """
+        r_list = []
+        if os.path.exists("Rectangle.json"):
+            os.remove("Rectangle.json")
+
+        Rectangle.save_to_file(r_list)
+        self.assertTrue(os.path.exists("Rectangle.json"))
+        with open("Rectangle.json", 'r', encoding='utf-8') as f:
+            self.assertEqual("[]", f.read())
 
 
 if __name__ == "__main__":

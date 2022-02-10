@@ -15,12 +15,6 @@ class TestBase(unittest.TestCase):
         """ Method to prepare each single test """
         Base._Base__nb_objects = 0
 
-    def tearDown(self):
-        try:
-            os.remove("Rectangle.json")
-        except:
-            pass
-
     def test_pep8_conformance(self):
         """ Test that we conform to PEP8 """
         pep8style = pep8.StyleGuide(quiet=True)

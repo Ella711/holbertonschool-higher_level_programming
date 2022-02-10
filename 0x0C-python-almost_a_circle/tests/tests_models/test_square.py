@@ -1,3 +1,4 @@
+import os
 import unittest
 import pep8
 import inspect
@@ -306,6 +307,37 @@ class TestBase(unittest.TestCase):
         r = Square(8)
         with self.assertRaises(TypeError):
             r_dict = r.to_dictionary(size=9)
+
+    def test_save_to_file(self):
+        """ Test normal use of the save_to_file method """
+        r1 = Square(8, 2, 2, 15)
+        r2 = Square(7, 3, 3, 15)
+        if os.path.exists("Square.json"):
+            os.remove("Square.json")
+
+        Square.save_to_file([r1, r2])
+        self.assertTrue(os.path.exists("Square.json"))
+
+    def test_save_to_file_none(self):
+        """ Test the save_to_file method with empty argument """
+        if os.path.exists("Square.json"):
+            os.remove("Square.json")
+
+        Square.save_to_file(None)
+        self.assertTrue(os.path.exists("Square.json"))
+        with open("Square.json", 'r', encoding='utf-8') as f:
+            self.assertEqual("[]", f.read())
+
+    def test_save_to_file_empty(self):
+        """ Test the save_to_file method with None """
+        r_list = []
+        if os.path.exists("Square.json"):
+            os.remove("Square.json")
+
+        Square.save_to_file(r_list)
+        self.assertTrue(os.path.exists("Square.json"))
+        with open("Square.json", 'r', encoding='utf-8') as f:
+            self.assertEqual("[]", f.read())
 
 
 if __name__ == "__main__":
