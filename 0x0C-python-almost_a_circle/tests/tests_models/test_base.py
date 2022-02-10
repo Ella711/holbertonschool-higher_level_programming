@@ -1,6 +1,8 @@
+import inspect
 import unittest
 import json
 import pep8
+import os
 from models import base
 from models.base import Base
 from models.rectangle import Rectangle
@@ -12,6 +14,12 @@ class TestBase(unittest.TestCase):
     def setUp(self):
         """ Method to prepare each single test """
         Base._Base__nb_objects = 0
+
+    def tearDown(self):
+        try:
+            os.remove("Rectangle.json")
+        except:
+            pass
 
     def test_pep8_conformance(self):
         """ Test that we conform to PEP8 """
@@ -27,6 +35,13 @@ class TestBase(unittest.TestCase):
     def test_class_documentation(self):
         """ Test if Base class is documented """
         self.assertTrue(Base.__doc__)
+
+    def test_methods_documentation(self):
+        """ Test if all Base methods are documented
+            """
+        methods = inspect.getmembers(Base)
+        for method in methods:
+            self.assertTrue(inspect.getdoc(method))
 
     def test_id(self):
         """Test ids given"""
@@ -67,14 +82,13 @@ class TestBase(unittest.TestCase):
 
     def test_to_json_string(self):
         """Test dict given translates into JSON string"""
-        testd0 = {"id": 1, "width": 2, "height": 3, "x": 4, "y": 5}
-        testd1 = {"id": 6, "width": 7, "height": 8, "x": 9, "y": 10}
-        teststringd01 = Base.to_json_string([testd0, testd1])
-        self.assertTrue(type(testd0) == dict)
-        self.assertTrue(type(teststringd01) == str)
-        self.assertTrue(teststringd01,
-                        [{"id": 1, "width": 2, "height": 3, "x": 4, "y": 5},
-                         {"id": 6, "width": 7, "height": 8, "x": 9, "y": 10}])
+        r = Rectangle(15, 7, 6, 5, 30)
+        r_dict = r.to_dictionary()
+        json_str = Base.to_json_string([r_dict])
+
+        self.assertIsInstance(json_str, str)
+        dict_r = json.loads(json_str)
+        self.assertEqual(dict_r, [r_dict])
 
     def test_none_to_json_string(self):
         """Test no dict given translates into JSON string of empty dict"""
@@ -93,17 +107,16 @@ class TestBase(unittest.TestCase):
 
     def test_from_json_string(self):
         """Test JSON string translates into Python dict"""
-        s0 = '[{"id": 1, "width": 2, "height": 3, "x": 4, "y": 5},\
-               {"id": 6, "width": 7, "height": 8, "x": 9, "y": 10}]'
-        strs0 = Base.from_json_string(s0)
-        self.assertTrue(type(s0) == str)
-        self.assertTrue(type(strs0) == list)
-        self.assertTrue(type(strs0[0]) == dict)
-        self.assertTrue(strs0,
-                        [{"id": 1, "width": 2, "height": 3, "x": 4, "y": 5},
-                         {"id": 6, "width": 7, "height": 8, "x": 9, "y": 10}])
-        self.assertTrue(strs0[0],
-                        {"id": 1, "width": 2, "height": 3, "x": 4, "y": 5})
+        dict_list = [
+            {'id': 10, 'size': 15, 'x': 1, 'y': 2},
+            {'id': 7, 'size': 14, 'x': 2, 'y': 1, }
+        ]
+        json_str = Base.to_json_string(dict_list)
+        json_dict_list = Base.from_json_string(json_str)
+
+        self.assertIsInstance(json_dict_list, list)
+        self.assertIsInstance(json_dict_list[0], dict)
+        self.assertIsInstance(json_dict_list[1], dict)
 
     def test_from_none_json_string(self):
         """Test no JSON string translates into empty list"""
@@ -119,6 +132,11 @@ class TestBase(unittest.TestCase):
         self.assertTrue(type(strs3) == list)
         self.assertTrue(strs3 == [])
 
+    def test_from_json_string_wrong_type(self):
+        """ Test passing wrong data type to from_json_string method """
+        with self.assertRaises(TypeError):
+            json_dict_list = Base.from_json_string(["r1", "r2"])
+
     def test_create(self):
         """Test setting attributes from a dictionary to another instance"""
         r = Rectangle(3, 5, 1, 2, 99)
@@ -127,6 +145,21 @@ class TestBase(unittest.TestCase):
         self.assertEqual(str(r), '[Rectangle] (99) 1/2 - 3/5')
         self.assertEqual(str(r2), '[Rectangle] (99) 1/2 - 3/5')
         self.assertIsNot(r, r2)
+
+    def test_create_without_dict(self):
+        """ Test create method by not passing a dict"""
+        r1 = Rectangle(9, 10)
+        with self.assertRaises(TypeError):
+            r2 = Rectangle.create(**r1)
+
+    def test_create_more_arguments(self):
+        """ Test create method by passing more arguments than expected"""
+        r1 = Rectangle(10, 15)
+        r2 = Rectangle(20, 25)
+        r1_dict = r1.to_dictionary()
+        r2_dict = r2.to_dictionary()
+        with self.assertRaises(TypeError):
+            r = Rectangle.create(**r1_dict, **r2_dict)
 
     def test_save_to_file(self):
         """Test save to file"""
@@ -149,6 +182,13 @@ class TestBase(unittest.TestCase):
         Rectangle.save_to_file([])
         with open("Rectangle.json", "r") as file:
             self.assertEqual('[]', file.read())
+
+    def test_save_to_file_more_arguments(self):
+        """ Test save_to_file method with more arguments """
+        r = Rectangle(4, 5)
+
+        with self.assertRaises(TypeError):
+            r.save_to_file([r], [])
 
     def test_load_from_file(self):
         """Test load from file"""
