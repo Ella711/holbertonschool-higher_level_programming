@@ -22,7 +22,8 @@ def main():
     ORDER BY id ASC""".format(argv[4]))
     query_rows = cursor.fetchall()
     for row in query_rows:
-        print(row)
+        if row[1] == argv[4]:
+            print(row)
     cursor.close()
     conn.close()
 
