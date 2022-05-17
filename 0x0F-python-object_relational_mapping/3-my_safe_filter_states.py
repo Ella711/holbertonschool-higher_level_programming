@@ -8,7 +8,12 @@ from sys import argv
 
 
 def main():
-    conn = MySQLdb.connect(host="localhost", port=3306, user=argv[1], passwd=argv[2], db=argv[3], charset="utf8")
+    conn = MySQLdb.connect(host="localhost",
+                           port=3306,
+                           user=argv[1],
+                           passwd=argv[2],
+                           db=argv[3],
+                           charset="utf8")
     cursor = conn.cursor()
     # HERE I have to know SQL to grab all states in my database
     cursor.execute("""SELECT * FROM states
