@@ -22,7 +22,8 @@ def main():
     ORDER BY id ASC""")
     query_rows = cursor.fetchall()
     for row in query_rows:
-        print(row)
+        if row[1].startswith("N"):
+            print(row)
     cursor.close()
     conn.close()
 
