@@ -1,3 +1,3 @@
 #!/bin/bash
 # Script that takes in URL, adds header variable and displays body response
-curl -s -H "X-HolbertonSchool-User-Id: 98" "$1"
+curl -s -X GET "$1" -H "X-School-User-Id: 98"
