@@ -8,8 +8,9 @@ the value of the X-Request-Id variable found in the header of the response.
     - You don’t need to check arguments passed to the script (number or type)
     - You must use a with statement
 """
-from urllib.request import Request, urlopen
 from sys import argv
+from urllib.request import Request, urlopen
+
 
 req = Request(argv[1])
 with urlopen(req) as response:
