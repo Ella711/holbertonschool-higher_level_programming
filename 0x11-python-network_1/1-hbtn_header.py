@@ -12,7 +12,7 @@ from sys import argv
 from urllib.request import Request, urlopen
 
 
-req = Request(argv[1])
-with urlopen(req) as response:
-    header = response.getheader("X-Request-Id")
-    print("{}".format(header))
+if __name__ == "__main__":
+    req = Request(argv[1])
+    with urlopen(req) as response:
+        print(response.getheader("X-Request-Id"))
