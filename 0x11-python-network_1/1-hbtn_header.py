@@ -14,4 +14,5 @@ from urllib.request import Request, urlopen
 
 req = Request(argv[1])
 with urlopen(req) as response:
-    print(response.getheader("X-Request-Id"))
+    header = response.getheader("X-Request-Id")
+    print("{}".format(header))
