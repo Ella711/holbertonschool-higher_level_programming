@@ -13,13 +13,12 @@ and uses the GitHub API to display your id
     - You don’t need to check arguments passed to the script (number or type)
 """
 import requests
-from requests.auth import HTTPBasicAuth
 from sys import argv
 
 
 if __name__ == "__main__":
 
     url = "https://api.github.com/users"
-    body = requests.get(url, auth=HTTPBasicAuth(argv[1], argv[2]))
+    body = requests.get(url, auth=(argv[1], argv[2]))
     github_json = body.json()
     print(github_json.get("id"))
